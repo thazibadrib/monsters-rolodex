@@ -27,16 +27,7 @@ class App extends Component {
     })
   }
 
-  render(){
-
-      //filteredMonsters is the new array that we get by comparing the latest event values with the names of monsters in the original "monsters" array
-
-      const filteredMonsters = this.state.monsters.filter((monster)=>{
-          return monster.name.toLocaleLowerCase().includes(this.state.searchField);
-        });
-    return (
-    <div className="App">
-      <input className='search-box' type='search' placeholder='search monsters' onChange={(event)=>{
+  onSearchChange = (event)=>{
         console.log(event.target.value);
         //searchString converts the event values to lowercase
         const searchString = event.target.value.toLocaleLowerCase()
@@ -45,10 +36,25 @@ class App extends Component {
           //we update the searchField with latest event value with the help of searchField
           return {searchField:searchString};
         })
-      }}/>
+      }
+
+
+  render(){
+
+      const {monsters, searchField} = this.state;
+      const {onSearchChange} = this;
+
+      //filteredMonsters is the new array that we get by comparing the latest event values with the names of monsters in the original "monsters" array
+
+      const filteredMonsters = monsters.filter((monster)=>{
+          return monster.name.toLocaleLowerCase().includes(searchField);
+        });
+    return (
+    <div className="App">
+      <input className='search-box' type='search' placeholder='search monsters' onChange={onSearchChange}/>
       
       {/* instead of mapping the priginal array, we map through the filteredMonsters array as it contains only the value that match with the latest event values. */}
-      
+
       {filteredMonsters.map((monster)=>{
         return <div key={monster.id}><h1>{monster.name}</h1></div>
       })}
